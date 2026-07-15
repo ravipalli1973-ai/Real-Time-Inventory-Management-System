@@ -1,3 +1,7 @@
+import streamlit as st
+
+st.title("Real-Time Inventory Management System")
+st.success("App is running successfully!")
 from flask import Flask, render_template, request, redirect, url_for
 from models import (
     add_product,
