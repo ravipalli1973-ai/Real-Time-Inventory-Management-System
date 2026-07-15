@@ -112,5 +112,7 @@ def edit_product(product_id):
 def delete(product_id):
     delete_product(product_id)
     return redirect(url_for("products"))
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
