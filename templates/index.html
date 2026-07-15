@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>
+
+    <h1>📦 Inventory Management System</h1>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/add">Add Product</a>
+        <a href="/products">View Products</a>
+    </nav>
+
+</header>
+
+<div class="dashboard">
+
+    <div class="card products-card">
+        <h2>Total Products</h2>
+        <p>{{ total_products }}</p>
+    </div>
+
+    <div class="card stock-card">
+        <h2>Total Stock</h2>
+        <p>{{ total_stock }}</p>
+    </div>
+
+    <div class="card low-card">
+        <h2>Low Stock</h2>
+        <p>{{ low_stock }}</p>
+    </div>
+
+</div>
+
+<footer>
+
+    <div class="developer-box">
+
+        <h3>👨‍💻 Developed By</h3>
+
+        <h2 class="developer-name">
+            Ravipalli Tirumala Kumar
+        </h2>
+
+        <p>Python | Flask | SQLite | Web Developer</p>
+
+    </div>
+
+</footer>
+</body>
+</html>
