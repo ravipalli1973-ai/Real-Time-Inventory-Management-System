@@ -108,10 +108,11 @@ def edit_product(product_id):
     )
 
 
-@app.route("/delete/<int:product_id>")
+@app.route("/delete/<int:product_id>", methods=["POST"])
 def delete(product_id):
     delete_product(product_id)
     return redirect(url_for("products"))
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
 
