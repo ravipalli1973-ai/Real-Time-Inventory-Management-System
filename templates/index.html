@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Inventory Management System</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -10,7 +12,6 @@
 <body>
 
 <header>
-
     <h1>📦 Inventory Management System</h1>
 
     <nav>
@@ -18,30 +19,35 @@
         <a href="/add">Add Product</a>
         <a href="/products">View Products</a>
     </nav>
-
 </header>
 
-<div class="dashboard">
+<main>
+    <div class="dashboard">
 
-    <div class="card products-card">
-        <h2>Total Products</h2>
-        <p>{{ total_products }}</p>
+        <div class="card products-card">
+            <h2>Total Products</h2>
+            <p>{{ total_products }}</p>
+        </div>
+
+        <div class="card stock-card">
+            <h2>Total Stock</h2>
+            <p>{{ total_stock }}</p>
+        </div>
+
+        <div class="card low-card">
+            <h2>Low Stock</h2>
+            <p>{{ low_stock }}</p>
+        </div>
+
+        <div class="card value-card">
+            <h2>Total Inventory Value</h2>
+            <p>₹{{ "%.2f"|format(total_inventory_value) }}</p>
+        </div>
+
     </div>
-
-    <div class="card stock-card">
-        <h2>Total Stock</h2>
-        <p>{{ total_stock }}</p>
-    </div>
-
-    <div class="card low-card">
-        <h2>Low Stock</h2>
-        <p>{{ low_stock }}</p>
-    </div>
-
-</div>
+</main>
 
 <footer>
-
     <div class="developer-box">
 
         <h3>👨‍💻 Developed By</h3>
@@ -53,7 +59,7 @@
         <p>Python | Flask | SQLite | Web Developer</p>
 
     </div>
-
 </footer>
+
 </body>
 </html>

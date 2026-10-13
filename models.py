@@ -160,3 +160,22 @@ def filter_products(category):
     conn.close()
 
     return products
+
+
+def get_total_inventory_value():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT SUM(price * quantity)
+        FROM products
+    """)
+
+    total_value = cursor.fetchone()[0]
+
+    conn.close()
+
+    if total_value is None:
+        return 0
+
+    return total_value
