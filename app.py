@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 
 from models import (
     add_product,
@@ -17,6 +17,44 @@ from models import (
 )
 
 app = Flask(__name__)
+app.secret_key = "inventory-management-local-key"
+
+
+def validate_product_form():
+    product_name = request.form.get("product_name", "").strip()
+    category = request.form.get("category", "").strip()
+    price_input = request.form.get("price", "").strip()
+    print("PRICE RECEIVED:", repr(price_input))
+    quantity_input = request.form.get("quantity", "").strip()
+    supplier = request.form.get("supplier", "").strip()
+
+    if not product_name or not category or not supplier:
+        return None, "Product name, category, and supplier are required."
+
+    try:
+        price = float(price_input)
+
+        if price < 0.001:
+            return None, "Price must be at least ₹0.001."
+
+    except (ValueError, TypeError):
+        return None, "Enter a valid price of at least ₹0.001."
+
+    try:
+        if not quantity_input or not quantity_input.isdigit():
+            return None, "Quantity must be a whole number of 0 or greater."
+
+        quantity = int(quantity_input)
+    except (ValueError, TypeError):
+        return None, "Enter a valid whole-number quantity."
+
+    return {
+        "product_name": product_name,
+        "category": category,
+        "price": price,
+        "quantity": quantity,
+        "supplier": supplier
+    }, None
 
 
 @app.route("/")
@@ -38,20 +76,21 @@ def home():
 @app.route("/add", methods=["GET", "POST"])
 def add():
     if request.method == "POST":
-        product_name = request.form["product_name"]
-        category = request.form["category"]
-        price = request.form["price"]
-        quantity = request.form["quantity"]
-        supplier = request.form["supplier"]
+        product, error = validate_product_form()
+
+        if error:
+            flash(error, "error")
+            return render_template("add_product.html")
 
         add_product(
-            product_name,
-            category,
-            price,
-            quantity,
-            supplier
+            product["product_name"],
+            product["category"],
+            product["price"],
+            product["quantity"],
+            product["supplier"]
         )
 
+        flash("Product added successfully!", "success")
         return redirect(url_for("products"))
 
     return render_template("add_product.html")
@@ -82,21 +121,27 @@ def products():
 @app.route("/edit/<int:product_id>", methods=["GET", "POST"])
 def edit_product(product_id):
     if request.method == "POST":
-        product_name = request.form["product_name"]
-        category = request.form["category"]
-        price = request.form["price"]
-        quantity = request.form["quantity"]
-        supplier = request.form["supplier"]
+        product, error = validate_product_form()
+
+        if error:
+            flash(error, "error")
+            current_product = get_product_by_id(product_id)
+
+            return render_template(
+                "edit_product.html",
+                product=current_product
+            )
 
         update_product(
             product_id,
-            product_name,
-            category,
-            price,
-            quantity,
-            supplier
+            product["product_name"],
+            product["category"],
+            product["price"],
+            product["quantity"],
+            product["supplier"]
         )
 
+        flash("Product updated successfully!", "success")
         return redirect(url_for("products"))
 
     product = get_product_by_id(product_id)
@@ -110,6 +155,7 @@ def edit_product(product_id):
 @app.route("/delete/<int:product_id>", methods=["POST"])
 def delete(product_id):
     delete_product(product_id)
+    flash("Product deleted successfully!", "success")
     return redirect(url_for("products"))
 
 

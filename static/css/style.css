@@ -224,14 +224,25 @@ form input{
     color:white;
 }
 
+
 /* Footer */
 
-footer{
-    margin-top:60px;
-    background:#111827;
-    text-align:center;
-    padding:30px;
+footer {
+    display: block;
+    width: 100%;
+    margin-top: 60px;
+    background: #f3f4f6;
+    color: #111827;
+    text-align: center;
+    padding: 30px;
+    border-top: 3px solid #2563eb;
 }
+
+footer p {
+    color: #111827;
+    margin: 0;
+}
+
 
 .developer-box{
     width:550px;

@@ -21,7 +21,6 @@
 <div class="container">
     <h2>All Products</h2>
 
-    <!-- Success and error messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             {% for category, message in messages %}
@@ -35,10 +34,8 @@
         {% endif %}
     {% endwith %}
 
-    <!-- Search and category filter -->
     <form method="GET" action="{{ url_for('products') }}"
           style="margin-bottom:20px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-
         <input type="text" name="search"
                placeholder="Search Product"
                value="{{ request.args.get('search', '') }}"
@@ -54,18 +51,12 @@
             {% endfor %}
         </select>
 
-        <button type="submit" style="width:auto; padding:10px 20px;">
-            Search
-        </button>
-
+        <button type="submit" style="width:auto; padding:10px 20px;">Search</button>
         <a href="{{ url_for('products') }}">
-            <button type="button" style="width:auto; padding:10px 20px;">
-                Clear
-            </button>
+            <button type="button" style="width:auto; padding:10px 20px;">Clear</button>
         </a>
     </form>
 
-    <!-- Products table -->
     <table>
         <tr>
             <th>ID</th>
@@ -85,7 +76,6 @@
             <td>{{ product.category }}</td>
             <td>₹ {{ "%.2f"|format(product.price) }}</td>
             <td>{{ product.quantity }}</td>
-
             <td>
                 {% if product.quantity < 10 %}
                     <span style="color:#dc2626; font-weight:bold;">Low Stock</span>
@@ -93,18 +83,14 @@
                     <span style="color:#16a34a; font-weight:bold;">In Stock</span>
                 {% endif %}
             </td>
-
             <td>{{ product.supplier }}</td>
             <td>
                 <a href="{{ url_for('edit_product', product_id=product.id) }}">Edit</a>
-
                 <form method="POST"
                       action="{{ url_for('delete', product_id=product.id) }}"
                       style="display:inline;"
                       onsubmit="return confirm('Are you sure you want to delete this product?');">
-                    <button type="submit" style="width:auto; padding:5px 10px;">
-                        Delete
-                    </button>
+                    <button type="submit" style="width:auto; padding:5px 10px;">Delete</button>
                 </form>
             </td>
         </tr>
@@ -116,5 +102,11 @@
     {% endif %}
 </div>
 
+<footer>
+    <p>&copy; 2026 Inventory Management System. All rights reserved.</p>
+</footer>
+
 </body>
 </html>
+
+
