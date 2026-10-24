@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Product</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -22,7 +20,7 @@
 
 <div class="form-container">
 
-    <h2>Edit Product</h2>
+    <h2 style="margin-bottom: 20px;">Edit Product</h2>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -39,27 +37,33 @@
 
     <form method="POST">
 
-        <label>Product Name</label>
-        <input type="text" name="product_name"
+        <label for="product_name">Product Name</label>
+        <input type="text" id="product_name" name="product_name"
                value="{{ product.product_name }}" required>
 
-        <label>Category</label>
-        <input type="text" name="category"
+        <label for="category">Category</label>
+        <input type="text" id="category" name="category"
                value="{{ product.category }}" required>
 
-        <label>Price (₹)</label>
-        <input type="number" step="0.001" min="0.001"
+        <label for="price">Price (₹)</label>
+        <input type="number" id="price" step="0.001" min="0.001"
                name="price" value="{{ product.price }}" required>
 
-        <label>Quantity</label>
-        <input type="number" min="0" step="1"
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" min="0" step="1"
                name="quantity" value="{{ product.quantity }}" required>
 
-        <label>Supplier</label>
-        <input type="text" name="supplier"
+        <label for="supplier">Supplier</label>
+        <input type="text" id="supplier" name="supplier"
                value="{{ product.supplier }}" required>
 
-        <button type="submit">Update Product</button>
+        <div style="display: flex; gap: 10px; align-items: center; margin-top: 25px;">
+            <button type="submit" style="margin-top: 0; flex: 1;">Update Product</button>
+            <a href="{{ url_for('products') }}" 
+               style="text-decoration: none; padding: 14px 20px; background: #475569; color: white; border-radius: 8px; font-weight: bold; text-align: center;">
+               Cancel
+            </a>
+        </div>
 
     </form>
 
