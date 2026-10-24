@@ -1,4 +1,4 @@
-
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 from models import (
@@ -17,14 +17,13 @@ from models import (
 )
 
 app = Flask(__name__)
-app.secret_key = "inventory-management-local-key"
+app.secret_key = os.environ.get("SECRET_KEY", "inventory-management-local-key")
 
 
 def validate_product_form():
     product_name = request.form.get("product_name", "").strip()
     category = request.form.get("category", "").strip()
     price_input = request.form.get("price", "").strip()
-    print("PRICE RECEIVED:", repr(price_input))
     quantity_input = request.form.get("quantity", "").strip()
     supplier = request.form.get("supplier", "").strip()
 
@@ -33,17 +32,14 @@ def validate_product_form():
 
     try:
         price = float(price_input)
-
         if price < 0.001:
             return None, "Price must be at least ₹0.001."
-
     except (ValueError, TypeError):
         return None, "Enter a valid price of at least ₹0.001."
 
     try:
         if not quantity_input or not quantity_input.isdigit():
             return None, "Quantity must be a whole number of 0 or greater."
-
         quantity = int(quantity_input)
     except (ValueError, TypeError):
         return None, "Enter a valid whole-number quantity."
@@ -120,31 +116,32 @@ def products():
 
 @app.route("/edit/<int:product_id>", methods=["GET", "POST"])
 def edit_product(product_id):
+    product = get_product_by_id(product_id)
+    if not product:
+        flash("Product not found.", "error")
+        return redirect(url_for("products"))
+
     if request.method == "POST":
-        product, error = validate_product_form()
+        form_data, error = validate_product_form()
 
         if error:
             flash(error, "error")
-            current_product = get_product_by_id(product_id)
-
             return render_template(
                 "edit_product.html",
-                product=current_product
+                product=product
             )
 
         update_product(
             product_id,
-            product["product_name"],
-            product["category"],
-            product["price"],
-            product["quantity"],
-            product["supplier"]
+            form_data["product_name"],
+            form_data["category"],
+            form_data["price"],
+            form_data["quantity"],
+            form_data["supplier"]
         )
 
         flash("Product updated successfully!", "success")
         return redirect(url_for("products"))
-
-    product = get_product_by_id(product_id)
 
     return render_template(
         "edit_product.html",
@@ -159,5 +156,10 @@ def delete(product_id):
     return redirect(url_for("products"))
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return redirect(url_for("home"))
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000, debug=True)
