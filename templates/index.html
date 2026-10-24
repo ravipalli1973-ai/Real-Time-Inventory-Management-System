@@ -1,12 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Inventory Management System</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -15,33 +12,37 @@
     <h1>📦 Inventory Management System</h1>
 
     <nav>
-        <a href="/">Dashboard</a>
+        <a href="/" class="active">Dashboard</a>
         <a href="/add">Add Product</a>
         <a href="/products">View Products</a>
     </nav>
 </header>
 
-<main>
+<main class="container">
     <div class="dashboard">
 
         <div class="card products-card">
-            <h2>Total Products</h2>
-            <p>{{ total_products }}</p>
+            <h2>🏷️ Total Products</h2>
+            <p class="stat-number">{{ total_products|default(0) }}</p>
         </div>
 
         <div class="card stock-card">
-            <h2>Total Stock</h2>
-            <p>{{ total_stock }}</p>
+            <h2>📊 Total Stock</h2>
+            <p class="stat-number">{{ total_stock|default(0) }}</p>
         </div>
 
         <div class="card low-card">
-            <h2>Low Stock</h2>
-            <p>{{ low_stock }}</p>
+            <h2>⚠️ Low Stock</h2>
+            <p class="stat-number" style="color: #dc2626; font-weight: bold;">
+                {{ low_stock|default(0) }}
+            </p>
         </div>
 
         <div class="card value-card">
-            <h2>Total Inventory Value</h2>
-            <p>₹{{ "%.2f"|format(total_inventory_value) }}</p>
+            <h2>💰 Total Inventory Value</h2>
+            <p class="stat-number">
+                ₹{{ "%.2f"|format(total_inventory_value|default(0.0)) }}
+            </p>
         </div>
 
     </div>
@@ -49,15 +50,12 @@
 
 <footer>
     <div class="developer-box">
-
         <h3>👨‍💻 Developed By</h3>
-
-        <h2 class="developer-name">
-            Ravipalli Tirumala Kumar
-        </h2>
-
+        <h2 class="developer-name">Ravipalli Tirumala Kumar</h2>
         <p>Python | Flask | SQLite | Web Developer</p>
-
+        <p style="margin-top: 8px; font-size: 0.85rem; opacity: 0.8;">
+            &copy; 2026 Inventory Management System. All rights reserved.
+        </p>
     </div>
 </footer>
 
